@@ -21,9 +21,6 @@ public class WebIndex extends Index {
     private HashMap<String, ArrayList<Integer>> currentWords;
     private int index;
 
-    // TODO: Implement all of this! You may choose your own data structures an internal APIs.
-    // You should not need to worry about serialization (just make any other data structures you use
-    // here also serializable - the Java standard library data structures already are, for example).
     public WebIndex() {
         indices = new HashMap<Page, HashMap<Integer, String>>();
         words = new HashMap<Page, HashMap<String, ArrayList<Integer>>>();
@@ -32,7 +29,7 @@ public class WebIndex extends Index {
         index = 0;
     }
 
-    //make sure to add as lowercase
+    //add word to the current hashmaps and increment the current index
     public void addWord(String word) {
         currentIndices.put(index, word);
         if(currentWords.get(word) == null)
@@ -41,6 +38,7 @@ public class WebIndex extends Index {
         index++;
     }
 
+    //create page object and add it to the general hashmaps (sets up the environment for adding words)
     public void setURL(URL url) {
         Page p = new Page(url);
         index = 0;
@@ -57,15 +55,4 @@ public class WebIndex extends Index {
     public HashMap<Page, HashMap<String, ArrayList<Integer>>> getWords() {
         return words;
     }
-
-    public String toString() {
-        Set<Page> keyset = words.keySet();
-        String output = "";
-        for(Page page : keyset) {
-            output += words.get(page).get("scholar");
-            output += "\n";
-        }
-        return output;
-    }
-    
 }

@@ -27,7 +27,6 @@ public class CrawlingMarkupHandler extends AbstractSimpleMarkupHandler {
     * This method returns the complete index that has been crawled thus far when called.
     */
     public Index getIndex() {
-        // TODO: Implement this!
         return index;
     }
 
@@ -36,7 +35,6 @@ public class CrawlingMarkupHandler extends AbstractSimpleMarkupHandler {
     * should be cleared.
     */
     public List<URL> newURLs() {
-        // TODO: Implement this!
         List<URL> tempUrls = new ArrayList<URL>();
         for(int i = 0; i < urls.size(); i++) {
             tempUrls.add(urls.get(i));
@@ -46,6 +44,7 @@ public class CrawlingMarkupHandler extends AbstractSimpleMarkupHandler {
         return tempUrls;
     }
 
+    //set the current url
     public void setURL(URL url) {
         currentURL = url;
         index.setURL(url);
@@ -67,10 +66,7 @@ public class CrawlingMarkupHandler extends AbstractSimpleMarkupHandler {
     * @param line            the line of the document where parsing starts
     * @param col             the column of the document where parsing starts
     */
-    public void handleDocumentStart(long startTimeNanos, int line, int col) {
-        // TODO: Implement this.
-        System.out.println("Start of document");
-    }
+    public void handleDocumentStart(long startTimeNanos, int line, int col) {}
 
     /**
     * Called when the parser finishes reading a document.
@@ -80,10 +76,7 @@ public class CrawlingMarkupHandler extends AbstractSimpleMarkupHandler {
     * @param line            the line of the document where parsing ends
     * @param col             the column of the document where the parsing ends
     */
-    public void handleDocumentEnd(long endTimeNanos, long totalTimeNanos, int line, int col) {
-        // TODO: Implement this.
-        System.out.println("End of document");
-    }
+    public void handleDocumentEnd(long endTimeNanos, long totalTimeNanos, int line, int col) {}
 
     /**
     * Called at the start of any tag.
@@ -93,8 +86,6 @@ public class CrawlingMarkupHandler extends AbstractSimpleMarkupHandler {
     * @param col         the column in the document where this element appears
     */
     public void handleOpenElement(String elementName, Map<String, String> attributes, int line, int col) {
-        // TODO: Implement this.
-        System.out.println("Start element: " + elementName);
         if(elementName.equals("style") || elementName.equals("script"))
             shouldIgnore = true;
         if(elementName.equals("a") && attributes.containsKey("href")) {
@@ -113,8 +104,6 @@ public class CrawlingMarkupHandler extends AbstractSimpleMarkupHandler {
     * @param col         the column in the document where this element appears.
     */
     public void handleCloseElement(String elementName, int line, int col) {
-        // TODO: Implement this.
-        System.out.println("End element:   " + elementName);
         if(elementName.equals("style") || elementName.equals("script"))
             shouldIgnore = false;
     }
@@ -128,16 +117,11 @@ public class CrawlingMarkupHandler extends AbstractSimpleMarkupHandler {
     * @param length  number of characters in ch
     */
     public void handleText(char[] ch, int start, int length, int line, int col) {
-        // TODO: Implement this.
-        System.out.print("Characters:    \"");
-
         if(!shouldIgnore) {
             String word = "";
             for(int i = start; i < start + length; i++) {
-                // Instead of printing raw whitespace, we're escaping it
-                if(Character.isLetter(ch[i]) || Character.isDigit(ch[i])) {
+                if(Character.isLetter(ch[i]) || Character.isDigit(ch[i]))
                     word += ch[i];
-                }
                 else {
                     if(word.length() > 0) {
                         index.addWord(word.toLowerCase());
@@ -147,8 +131,6 @@ public class CrawlingMarkupHandler extends AbstractSimpleMarkupHandler {
             }
             if(word.length() > 0)
                 index.addWord(word.toLowerCase());
-
-            System.out.print("\"\n");
         }
     }
 }

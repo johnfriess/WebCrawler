@@ -24,5 +24,7 @@ public class Page implements Serializable {
     /**
      * @return the URL of the page.
      */
-    public URL getURL() { return url; }
+    public URL getURL() { 
+        return url; 
+    }
 }

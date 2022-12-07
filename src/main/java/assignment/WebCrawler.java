@@ -22,7 +22,7 @@ public class WebCrawler {
         // Basic usage information
         if (args.length == 0) {
             System.err.println("Error: No URLs specified.");
-            System.exit(1);
+            return;
         }
 
         // We'll throw all the args into a queue for processing.
@@ -41,7 +41,6 @@ public class WebCrawler {
         CrawlingMarkupHandler handler = new CrawlingMarkupHandler();
 
         Set<URL> visited = new HashSet<URL>();
-        int count = 0;
 
         // Try to start crawling, adding new URLS as we see them.
         while (!remaining.isEmpty()) {
@@ -52,9 +51,7 @@ public class WebCrawler {
                 if(!visited.contains(site)) {
                     visited.add(site);
                     handler.setURL(site);
-                    System.out.println("site: " + site);
                     parser.parse(new InputStreamReader(site.openStream()), handler);
-                    count++;
 
                     // Add any new URLs
                     remaining.addAll(handler.newURLs());
@@ -63,21 +60,17 @@ public class WebCrawler {
                 System.err.println("Error: Website cannot be parsed! Site: " + site);
             }
         }
-        
-        System.out.println(visited.size());
 
         try {
             handler.getIndex().save("index.db");
-            System.out.println(((WebIndex)handler.getIndex()).getIndices().size());
-            System.out.println(count);
         } catch (Exception e) {
             // Bad exception handling :(
             System.err.println("Error: Index generation failed!");
             e.printStackTrace();
-            System.exit(1);
         }
     }
 
+    //remove duplicate pages that have different urls
     public static URL removeSamePage(URL url) throws MalformedURLException {
         if(url.toString().indexOf("?") >= 0)
             return new URL(url.toString().substring(0, url.toString().indexOf("?")));
